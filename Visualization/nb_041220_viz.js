@@ -1,9 +1,9 @@
 function main() {
-    showBarGraphs("#bar-graph");
-    showScatter("#scatter");
+    // showBarGraphs("#bar-graph");
+    showScatter(d3.select("#scatter"));
 }
 
-function showBarGraphs(divID) {
+function showBarGraphs(id) {
     const data_url = "data/ac_space_3.csv";
 
     const svg = d3.select(divID).select("svg");
@@ -137,12 +137,15 @@ function showBarGraphs(divID) {
 
 }
 
-function showScatter(divID) {
+function showScatter(parent) {
     const data_url = "data/ac_space_3.csv";
 
-    const svg = d3.select(divID).select("svg");
+    const svg = parent.append("svg")
+        .attr("width", 500)
+        .attr("height", 500);
 
     const width = +svg.attr("width");
+    console.log(width)
     const height = +svg.attr("height");
 
     const margin = {
@@ -208,8 +211,8 @@ function showScatter(divID) {
                 .style("fill", "black")
                 .attr("r", "7");
 
-            showTrialOpt("#line_graph_t_opt", selected_sub);
-            showTrialSr("#line_graph_t_sr", selected_sub);
+            showTrialOpt("#t-opt-line", selected_sub);
+            showTrialSr("#t-sr-line", selected_sub);
         }
 
 
@@ -220,8 +223,8 @@ function showScatter(divID) {
                 .style("fill", "lightgrey")
                 .attr("r", 5);
 
-            d3.select("#line_graph_t_opt").selectAll("svg").data([]).exit().remove();
-            d3.select("#line_graph_t_sr").selectAll("svg").data([]).exit().remove();
+            d3.select("#t-opt-line").selectAll("svg").data([]).exit().remove();
+            d3.select("#t-sr-line").selectAll("svg").data([]).exit().remove();
 
             // showTrialOpt("#line_graph_t_opt", 0);
             // showTrialSr("#line_graph_t_sr", 0);
