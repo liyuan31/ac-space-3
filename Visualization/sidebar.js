@@ -1,13 +1,15 @@
 /**
  * This function wraps the processes of rendering sidebar content.
  */
-function render_sidebar() {
-    const data_url = "data/ac_space_3.csv";
-
-    d3.csv(data_url).then(data => render(data));
-
-    // The render function in d3.csv callback
-    const render = function(data) {
-        
+class SidebarWidget {
+    constructor(data) {
+        this.data = data;   // an object from <Data> class
+        this.content_div = d3.select(".side-bar-content");
     }
+
+    render() {
+        const a_opt_bar = this.content_div.select(".a-opt-bar").append("svg");
+        a_opt_bar.attr("width", this.data.mean_a_opt_b_1);
+    }
+
 }

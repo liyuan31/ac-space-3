@@ -49,6 +49,11 @@ body {
 
 }
 
+/* Side bar widgets */
+.a-opt-bar {
+    width: 80%;
+}
+
 /* figures */
 
 .figure-title {
