@@ -76,15 +76,15 @@ body {
 }
 
 .panel#a-opt > .figure > svg > line {
-    stroke: green;
+    stroke: red;
 }
 
 .panel#a-sr > .figure > svg > line {
-    stroke: pink;
+    stroke: blue;
 }
 
 .panel#a-rt > .figure > svg > line {
-    stroke: blue;
+    stroke: green;
 }
 
 .a-opt-bar {
