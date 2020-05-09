@@ -15,8 +15,11 @@ class SidebarWidget {
         a_opt.select(".figure").append("svg").append("line")
             .attr("x1", "0")
             .attr("y1", "0")
-            .attr("x2", `${this.data.mean_a_opt}%`)
-            .attr("y2", "0");
+            .attr("x2", "0")
+            .attr("y2", "0")
+            .transition()
+                .duration(1000)
+                .attr("x2", `${this.data.mean_a_opt}%`);
         const a_sr = this.content_div.select("#a-sr");
         a_sr.select(".info").select(".label").html("P. Switch");
         a_sr.select(".info").select(".value").html(`${this.data.mean_a_opt}%`);
