@@ -8,8 +8,31 @@ class SidebarWidget {
     }
 
     render() {
-        const a_opt_bar = this.content_div.select(".a-opt-bar").append("svg");
-        a_opt_bar.attr("width", this.data.mean_a_opt_b_1);
+        // First render elements for each panel
+        const a_opt = this.content_div.select("#a-opt");
+        a_opt.select(".info").select(".label").html("P. Optimal");
+        a_opt.select(".info").select(".value").html(`${this.data.mean_a_opt}%`);
+        a_opt.select(".figure").append("svg").append("line")
+            .attr("x1", "0")
+            .attr("y1", "0")
+            .attr("x2", `${this.data.mean_a_opt}%`)
+            .attr("y2", "0");
+        const a_sr = this.content_div.select("#a-sr");
+        a_sr.select(".info").select(".label").html("P. Switch");
+        a_sr.select(".info").select(".value").html(`${this.data.mean_a_opt}%`);
+        a_sr.select(".figure").append("svg").append("line")
+            .attr("x1", "0")
+            .attr("y1", "0")
+            .attr("x2", `${this.data.mean_a_opt}%`)
+            .attr("y2", "0");
+        const a_rt = this.content_div.select("#a-rt");
+        a_rt.select(".info").select(".label").html("Response Time");
+        a_rt.select(".info").select(".value").html(`${this.data.mean_a_opt}%`);
+        a_rt.select(".figure").append("svg").append("line")
+            .attr("x1", "0")
+            .attr("y1", "0")
+            .attr("x2", `${this.data.mean_a_opt}%`)
+            .attr("y2", "0");  
     }
 
 }

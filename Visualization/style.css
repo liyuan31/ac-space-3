@@ -50,7 +50,46 @@ body {
 }
 
 /* Side bar widgets */
+.side-bar-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.panel {
+    display: flex;
+    flex-direction: column;
+}
+
+.panel > .info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* TODO: not responsive */
+.panel > .figure > svg {
+    height: 30px;
+}
+
+.panel > .figure > svg > line {
+    stroke-width: 15px;
+}
+
+.panel#a-opt > .figure > svg > line {
+    stroke: pink;
+}
+
+.panel#a-sr > .figure > svg > line {
+    stroke: pink;
+}
+
+.panel#a-rt > .figure > svg > line {
+    stroke: pink;
+}
+
 .a-opt-bar {
+    flex-direction: column;
+    display: flex;
     width: 80%;
 }
 
