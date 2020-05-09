@@ -1,5 +1,5 @@
 function main() {
-    // showBarGraphs("#bar");
+    showBarGraphs("#bar-graph");
     showScatter("#scatter");
 }
 
