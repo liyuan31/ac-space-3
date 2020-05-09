@@ -76,7 +76,7 @@ body {
 }
 
 .panel#a-opt > .figure > svg > line {
-    stroke: pink;
+    stroke: green;
 }
 
 .panel#a-sr > .figure > svg > line {
@@ -84,7 +84,7 @@ body {
 }
 
 .panel#a-rt > .figure > svg > line {
-    stroke: pink;
+    stroke: blue;
 }
 
 .a-opt-bar {
