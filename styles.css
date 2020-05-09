@@ -1,0 +1,53 @@
+body {
+    border: 10px solid black;
+    padding: 20px;
+    max-width: 700px;
+    width: 80%;
+    margin: 20px auto;
+    font-family: 'Source Sans Pro', sans-serif;
+
+}
+
+h1 {
+    text-align: center;
+}
+
+.title {
+    font-size: 24px;
+    text-align: center;
+
+}
+
+/* figures */
+
+.figure-title {
+    text-anchor: middle;
+    font-family: Arial;
+    font-size: 18px;
+}
+
+.axis {
+    font-size: 16px;
+}
+
+.axis-label {
+    text-anchor: middle;
+    font-family: Arial;
+    font-size: 18px;
+}
+
+.line_a {
+    fill: none;
+    stroke: red;
+    stroke-width: 2px;
+}
+
+.line_s {
+    fill: none;
+    stroke: black;
+    stroke-width: 2px;
+}
+
+#bar rect {
+    fill: steelblue;
+}
