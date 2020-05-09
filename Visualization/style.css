@@ -8,15 +8,9 @@ body {
 
 }
 
-
-h1 {
-    text-align: center;
-}
-
-
-
 .header-wrapper {
-
+    border: 5px solid black;
+    margin-bottom: 20px;
 }
 
 .main-section-wrapper {
@@ -28,6 +22,11 @@ h1 {
     justify-content: space-between;
 }
 
+.footer-wrapper {
+    border: 5px solid black;
+    margin-top: 20px;
+}
+
 .content-wrapper {
     border: 5px solid black;
     width: 68%;
@@ -36,6 +35,12 @@ h1 {
 .side-bar-wrapper {
     border: 5px solid black;
     width: 28%;
+}
+
+
+.grand-title {
+    text-align: center;
+    font-size: 3em;
 }
 
 .title {
