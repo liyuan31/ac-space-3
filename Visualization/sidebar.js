@@ -12,14 +12,15 @@ class SidebarWidget {
         const a_opt = this.content_div.select("#a-opt");
         a_opt.select(".info").select(".label").html("P. Optimal");
         a_opt.select(".info").select(".value").html(`${this.data.mean_a_opt}%`);
-        a_opt.select(".figure").append("svg").append("line")
+        const a_svg = a_opt.select(".figure").selectAll("svg").data([this.data]);
+        a_svg.enter().append("svg").append("line")
             .attr("x1", "0")
             .attr("y1", "0")
             .attr("x2", "0")
             .attr("y2", "0")
             .transition()
                 .duration(1000)
-                .attr("x2", `${this.data.mean_a_opt}%`);
+                .attr("x2", d => `${d.mean_a_opt}%`);
         const a_sr = this.content_div.select("#a-sr");
         a_sr.select(".info").select(".label").html("Switch Rate");
         a_sr.select(".info").select(".value").html(`${this.data.mean_a_sr}%`);
