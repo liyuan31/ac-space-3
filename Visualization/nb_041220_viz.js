@@ -145,7 +145,6 @@ function showScatter(parent) {
         .attr("height", 500);
 
     const width = +svg.attr("width");
-    console.log(width)
     const height = +svg.attr("height");
 
     const margin = {
