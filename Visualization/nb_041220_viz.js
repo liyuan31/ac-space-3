@@ -210,8 +210,9 @@ function showScatter(parent) {
                 .style("fill", "black")
                 .attr("r", "7");
 
-            showTrialOpt("#t-opt-line", selected_sub);
-            showTrialSr("#t-sr-line", selected_sub);
+            // main_update(selected_sub);
+            // showTrialOpt("#t-opt-line", selected_sub);
+            // showTrialSr("#t-sr-line", selected_sub);
         }
 
 
@@ -250,6 +251,7 @@ function showScatter(parent) {
             // .style("fill", function (d) { return color[d.idx-1] } )
             // .on("load", doNotHighlight )
             .on("mouseover", highlight)
+            .on("click", d => main_update(d.sub))
             .on("mouseleave", doNotHighlight);
 
     }
