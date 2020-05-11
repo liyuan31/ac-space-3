@@ -53,10 +53,13 @@ class SidebarWidget {
         // Since the data object bound with <svg> will always contain only one element, the exit
         // selection should always be null. But I'll write the following statement just for completeness.
         a_svg.exit().remove();
+
+        // And do the same thing to switch rate
         const a_sr = this.parent.select("#a-sr");
         a_sr.select(".info").select(".label").html("Switch Rate");
         a_sr.select(".info").select(".value").html(`${this.data.a_sr}%`);
-        a_sr.select(".figure").append("svg").append("line")
+        const a_sr_figure_svg = a_sr.select(".figure").selectAll("svg").data([this.data]);
+        a_sr_figure_svg.enter().append("svg").append("line")
             .attr("x1", "0")
             .attr("y1", "0")
             .attr("x2", "0")
@@ -64,19 +67,40 @@ class SidebarWidget {
             .transition()
                 .duration(1000)
                 .attr("x2", `${this.data.a_sr}%`);
-        const a_rt = this.parent.select("#a-rt");
-        a_rt.select(".info").select(".label").html("Response Time");
-        a_rt.select(".info").select(".value").html(`${this.data.a_rt}`);
-        // calculate the proportion rt of 6s, since the max rt in the dataset is 5.8
-        const rt_prop = this.data.a_rt/6*100;
-        a_rt.select(".figure").append("svg").append("line")
+        a_sr_figure_svg.selectAll("line").remove();
+        a_sr_figure_svg.append("line")
             .attr("x1", "0")
             .attr("y1", "0")
             .attr("x2", "0")
             .attr("y2", "0")
             .transition()
                 .duration(1000)
-                .attr("x2", `${rt_prop}%`);  
+                .attr("x2", `${this.data.a_sr}%`);
+
+        // And do pretty much the same thing to RT, with some adjustments
+        const a_rt = this.parent.select("#a-rt");
+        a_rt.select(".info").select(".label").html("Response Time");
+        a_rt.select(".info").select(".value").html(`${this.data.a_rt}`);
+        // calculate the proportion rt of 6s, since the max rt in the dataset is 5.8
+        const rt_prop = this.data.a_rt/6*100;
+        const a_rt_figure_svg = a_rt.select(".figure").selectAll("svg").data([this.data]);
+        a_rt_figure_svg.enter().append("svg").append("line")
+            .attr("x1", "0")
+            .attr("y1", "0")
+            .attr("x2", "0")
+            .attr("y2", "0")
+            .transition()
+                .duration(1000)
+                .attr("x2", `${rt_prop}%`);
+        a_rt_figure_svg.selectAll("line").remove();
+        a_rt_figure_svg.append("line")
+            .attr("x1", "0")
+            .attr("y1", "0")
+            .attr("x2", "0")
+            .attr("y2", "0")
+            .transition()
+                .duration(1000)
+                .attr("x2", `${this.data.a_sr}%`);
     }
 
 }
