@@ -63,6 +63,7 @@ body {
 .side-bar-content {
     display: flex;
     flex-direction: column;
+    padding: 5%;
 }
 
 .panel {
@@ -74,11 +75,12 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    margin-bottom: 2%;
 }
 
 /* TODO: not responsive */
 .panel > .figure > svg {
-    height: 30px;
+    height: 15px;
 }
 
 .panel > .figure > svg > line {
