@@ -10,8 +10,6 @@ const render = function(data) {
         for (i; i < data.length; i++) {
             if (data[i].sub === sub) break;
         }
-        console.log(i);
-        console.log(data[i]);
         sidebar.update(data[i]);        
     } else { Error("Error: update called on initialization")}
 }
