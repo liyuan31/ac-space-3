@@ -87,18 +87,6 @@ body {
     stroke-width: 15px;
 }
 
-.panel#a-opt > .figure > svg > line {
-    stroke: red;
-}
-
-.panel#a-sr > .figure > svg > line {
-    stroke: blue;
-}
-
-.panel#a-rt > .figure > svg > line {
-    stroke: green;
-}
-
 .a-opt-bar {
     flex-direction: column;
     display: flex;
