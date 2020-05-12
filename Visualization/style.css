@@ -61,6 +61,17 @@ body {
     padding: 5%;
 }
 
+/* Notice that the 1,2th children are sidebar titles */
+.side-bar-content :nth-child(1) {order: 1;}
+.side-bar-content :nth-child(2) {order: 5;}
+.side-bar-content :nth-child(3) {order: 2;}
+.side-bar-content :nth-child(4) {order: 3;}
+.side-bar-content :nth-child(5) {order: 4;}
+.side-bar-content :nth-child(6) {order: 6;}
+.side-bar-content :nth-child(7) {order: 7;}
+.side-bar-content :nth-child(8) {order: 8;}
+
+
 .panel {
     display: flex;
     flex-direction: column;

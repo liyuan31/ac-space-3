@@ -13,7 +13,47 @@ class SidebarWidget {
         // the width of the parent element
         // TODO: this is hard-coded
         this.width = 252;
+        this.initialize();
         this.update();
+    }
+
+    /**
+     * This method intializes all necessary elements of the sidebar object
+     * For referrence, every "panel" class will look like this,
+     *  <div class="panel" id="s-opt">
+     *      <div class="info">
+     *          <div class="label"></div>
+     *          <div class="value"></div>
+     *      </div>
+     *      <div class="figure"></div>
+     *  </div>
+     */
+    initialize() {
+        const panel_id_names = [
+            "a-opt", "a-sr", "a-rt", "s-opt", "s-sr", "s-rt"
+        ];
+        const parent = this.parent;
+
+        // The titles are inserted here, and their order is determined by CSS flexbox
+        parent.append("div").attr("class", "title").html("Standard ACVS");
+        parent.append("div").attr("class", "title").html("Spatial ACVS");
+
+        // Add panel div
+        panel_id_names.forEach( name => {
+            const panel = parent.append("div")
+                .attr("class", "panel")
+                .attr("id", name);
+            const info = panel.append("div").attr("class", "info");
+            // Add two div, label and value, for the info section.
+            // This is the parameter name (e.g., switch rate) and the corresponding value.
+            info.selectAll("div").data(["label", "value"])
+                .enter().append("div")
+                    .attr("class", d => d);
+            // Add the figure div for the panel, and this is where the line comes in.
+            panel.append("div").attr("class", "figure");
+        });
+
+
     }
 
     /**
