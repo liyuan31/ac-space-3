@@ -231,6 +231,7 @@ function showScatter(parent) {
         const clicked = function(d) {
             main_update(d.sub)
             render_trial_opt(d);
+            render_trial_sr(d);
         }
 
         // Add dots
@@ -453,7 +454,7 @@ function initialize() {
         // append the svg obgect to the body of the page
         // appends a 'group' element to 'svg'
         // moves the 'group' element to the top left margin
-        const svg = d3.select("#t-opt-line").append("svg")
+        const svg = d3.select("#t-opt-lines").append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
@@ -473,6 +474,51 @@ function initialize() {
 
         svg.append("g")
             .attr("id", "a-opt-line-g")
+            .attr("class", "line");
+    }
+
+    {
+        // set the dimensions and margins of the graph
+        const margin = {
+            top: 20,
+            right: 20,
+            bottom: 30,
+            left: 50
+        },
+            width = 480 - margin.left - margin.right,
+            height = 250 - margin.top - margin.bottom;
+
+        // set the ranges
+        const x = d3.scaleLinear().range([0, width]);
+        const y = d3.scaleLinear().range([height, 0]);
+
+        x.domain([0, 252]);
+
+        y.domain([0, 1]);
+
+        // append the svg obgect to the body of the page
+        // appends a 'group' element to 'svg'
+        // moves the 'group' element to the top left margin
+        const svg = d3.select("#t-sr-lines").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform",
+                "translate(" + margin.left + "," + margin.top + ")");
+
+        // Add the X Axis
+        svg.append("g")
+            .attr("class", "axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x));
+
+        // Add the Y Axis
+        svg.append("g")
+            .attr("class", "axis")
+            .call(d3.axisLeft(y));
+
+        svg.append("g")
+            .attr("id", "t-sr-line-g")
             .attr("class", "line");
     }
 }
@@ -519,7 +565,7 @@ function render_trial_opt(d) {
         d3.selectAll("#a-opt-line-g .line_a")
             .data([data])
             .transition()
-                .duration(1000)
+                .duration(500)
                 .attr("d", valueline);
     });
 
@@ -529,8 +575,64 @@ function render_trial_opt(d) {
         d3.selectAll("#a-opt-line-g .line_s")
             .data([data])
             .transition()
-            .duration(1000)
+            .duration(500)
                 .attr("d", valueline);
     });
+}
+
+function render_trial_sr(d) {
+
+
+        // set the dimensions and margins of the graph
+        const margin = {
+            top: 20,
+            right: 20,
+            bottom: 30,
+            left: 50
+        },
+            width = 480 - margin.left - margin.right,
+            height = 250 - margin.top - margin.bottom;
+    
+        // set the ranges
+        const x = d3.scaleLinear().range([0, width]);
+        const y = d3.scaleLinear().range([height, 0]);
+    
+        x.domain([0, 252]);
+    
+        y.domain([0, 1]);
+    
+        // define the line
+        const valueline = d3.line()
+            .x(function(d) {
+                return x(d.trial_no);
+            })
+            .y(function(d) {
+                return y(d.ten_trials_mean);
+            });
+    
+        d3.select("#t-sr-line-g").selectAll("path").data(["line_a", "line_s"]).enter()
+            .append("path")
+            .attr("class", d => d);
+    
+        // Plot Spatial ACVS p. optimal across trials
+        d3.csv("data/time_series/a_trial_sr_" + d.sub + ".csv").then(function(data) {
+    
+            // Add the valueline path.
+            d3.selectAll("#t-sr-line-g .line_a")
+                .data([data])
+                .transition()
+                    .duration(500)
+                    .attr("d", valueline);
+        });
+    
+        d3.csv("data/time_series/s_trial_sr_" + d.sub + ".csv").then(function(data) {
+    
+            // Add the valueline path.
+            d3.selectAll("#t-sr-line-g .line_s")
+                .data([data])
+                .transition()
+                .duration(500)
+                    .attr("d", valueline);
+        });
 
 }
