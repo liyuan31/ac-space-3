@@ -1,5 +1,6 @@
 const sidebar = new SidebarWidget();
 // main_update(0);
+const heatmap = new HeatmapWidget();
 
 function main_update(sub) {
 
