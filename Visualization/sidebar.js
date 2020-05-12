@@ -91,12 +91,12 @@ class SidebarWidget {
             .range(["rgb(153, 204, 255)", "blue"]);
 
         const all_panels_data = [
-            {id: "#a-opt", label: "P. Optimal", value: this.data.a_opt, value_scale: prop_scale, color_scale: color_scale_red},
-            {id: "#a-sr", label: "Switch Rate", value: this.data.a_sr, value_scale: prop_scale, color_scale: color_scale_green},
-            {id: "#a-rt", label: "Response Time", value: this.data.a_rt, value_scale: rt_scale, color_scale: color_scale_blue},
-            {id: "#s-opt", label: "P. Optimal", value: this.data.s_opt, value_scale: prop_scale, color_scale: color_scale_red},
-            {id: "#s-sr", label: "Switch Rate", value: this.data.s_sr, value_scale: prop_scale, color_scale: color_scale_green},
-            {id: "#s-rt", label: "Response Time", value: this.data.s_rt, value_scale: rt_scale, color_scale: color_scale_blue}
+            {id: "#a-opt", label: "P. Optimal", unit: "%", value: this.data.a_opt, value_scale: prop_scale, color_scale: color_scale_red},
+            {id: "#a-sr", label: "Switch Rate", unit: "%", value: this.data.a_sr, value_scale: prop_scale, color_scale: color_scale_green},
+            {id: "#a-rt", label: "Response Time", unit: "s", value: this.data.a_rt, value_scale: rt_scale, color_scale: color_scale_blue},
+            {id: "#s-opt", label: "P. Optimal", unit: "%", value: this.data.s_opt, value_scale: prop_scale, color_scale: color_scale_red},
+            {id: "#s-sr", label: "Switch Rate", unit: "%", value: this.data.s_sr, value_scale: prop_scale, color_scale: color_scale_green},
+            {id: "#s-rt", label: "Response Time", unit: "s", value: this.data.s_rt, value_scale: rt_scale, color_scale: color_scale_blue}
         ];
 
         all_panels_data.forEach( data => {
@@ -106,7 +106,7 @@ class SidebarWidget {
             // First render elements for each panel
             const panel = this.parent.select( data.id );
             panel.select(".info").select(".label").html( data.label );
-            panel.select(".info").select(".value").html(`${data.value}%`);
+            panel.select(".info").select(".value").html(`${data.value}` + `${data.unit}`);
             panel.select(".figure").selectAll("svg").data([0]).enter().append("svg");
             const panel_figure_svg = panel.select(".figure").select("svg");
             const panel_figure_svg_line = panel_figure_svg.selectAll("line").data([data.value]);
