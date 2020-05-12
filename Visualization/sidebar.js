@@ -9,7 +9,8 @@ class SidebarWidget {
             a_rt: "0",
             s_opt: "0",
             s_sr: "0",
-            s_rt: "0"
+            s_rt: "0",
+            sub: "Mean"
         };   // an object from <Data> class
         // the parent element of the widget
         this.parent = d3.select(".side-bar-content");
@@ -38,10 +39,13 @@ class SidebarWidget {
         const parent = this.parent;
 
         // The titles are inserted here, and their order is determined by CSS flexbox
-        parent.append("div").attr("class", "title").html("Standard ACVS");
-        parent.append("div").attr("class", "title").html("Spatial ACVS");
+        parent.append("div").attr("class", "title").html("Standard ACVS");  // 1st child
+        parent.append("div").attr("class", "title").html("Spatial ACVS");   // 2nd child
 
+        // Subject id
+        parent.append("div").attr("class", "sub-id");   // 3rd child
         // Add panel div
+        // These are 4,5,6, and 7,8,9 child elements
         panel_id_names.forEach( name => {
             const panel = parent.append("div")
                 .attr("class", "panel")
@@ -90,6 +94,15 @@ class SidebarWidget {
             .domain([0, 100])
             .range(["rgb(153, 204, 255)", "blue"]);
 
+        // Render data for subject id
+        const sub = this.parent.select(".sub-id").selectAll("div").data([this.data.sub]);
+        sub.enter().append("div")
+            .merge(sub) // merge update selection
+                .html(d => `Selected: ${d}`);
+
+        // Render data for all panels.
+        // This will include panel names (which is not necessary, I should fix in the future)
+        // and data and the colorful lines
         const all_panels_data = [
             {id: "#a-opt", label: "P. Optimal", unit: "%", value: this.data.a_opt, value_scale: prop_scale, color_scale: color_scale_red},
             {id: "#a-sr", label: "Switch Rate", unit: "%", value: this.data.a_sr, value_scale: prop_scale, color_scale: color_scale_green},
