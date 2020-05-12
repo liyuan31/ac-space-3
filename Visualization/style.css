@@ -13,7 +13,7 @@ body {
     margin-bottom: 20px;
 }
 
-.main-section-wrapper {
+.content-wrapper {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -27,9 +27,11 @@ body {
     margin-top: 20px;
 }
 
-.content-wrapper {
+.main-section-wrapper {
     border: 5px solid black;
     width: 68%;
+    display: flex;
+    flex-direction: column;
 }
 
 .side-bar-wrapper {
@@ -50,14 +52,7 @@ body {
 }
 
 /* Main section */
-.content-wrapper {
-    display: flex;
-    flex-direction: column;
-    
-}
 
-.content-wrapper > #scatter {
-}
 
 /* Side bar widgets */
 .side-bar-content {
