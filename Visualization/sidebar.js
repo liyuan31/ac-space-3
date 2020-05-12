@@ -6,7 +6,10 @@ class SidebarWidget {
         this.data = {
             a_opt: "0",
             a_sr: "0",
-            a_rt: "0"
+            a_rt: "0",
+            s_opt: "0",
+            s_sr: "0",
+            s_rt: "0"
         };   // an object from <Data> class
         // the parent element of the widget
         this.parent = d3.select(".side-bar-content");
@@ -87,71 +90,46 @@ class SidebarWidget {
             .domain([0, 100])
             .range(["rgb(153, 204, 255)", "blue"]);
 
-        // First render elements for each panel
-        const a_opt = this.parent.select("#a-opt");
-        a_opt.select(".info").select(".label").html("P. Optimal");
-        a_opt.select(".info").select(".value").html(`${this.data.a_opt}%`);
-        a_opt.select(".figure").selectAll("svg").data([0]).enter().append("svg");
-        const a_opt_figure_svg = a_opt.select(".figure").select("svg");
-        const a_opt_figure_svg_line = a_opt_figure_svg.selectAll("line").data([this.data]);
-        // If <svg> does not exist, i.e., in the intial rendering, the enter selection will have
-        // one sub-selection of <svg>.
-        // When the render function is called again, the enter selection is null, so in order to
-        // update, we need to merge the enter selection with the existing selection.
-        a_opt_figure_svg_line.enter().append("line")
-            .merge(a_opt_figure_svg_line)
-            .attr("x1", "0")
-            .attr("y1", "0")
-            .attr("x2", "0")
-            .attr("y2", "0")
-            .attr("stroke", color_scale_red(0))
-            .transition()
-                .duration(1000)
-                .attr("x2", d => `${prop_scale(d.a_opt)}`)
-                .attr("stroke", d => `${color_scale_red(d.a_opt)}`);
-        // Since the data object bound with <svg> will always contain only one element, the exit
-        // selection should always be null. But I'll write the following statement just for completeness.
-        a_opt_figure_svg_line.exit().remove();
+        const all_panels_data = [
+            {id: "#a-opt", label: "P. Optimal", value: this.data.a_opt, value_scale: prop_scale, color_scale: color_scale_red},
+            {id: "#a-sr", label: "Switch Rate", value: this.data.a_sr, value_scale: prop_scale, color_scale: color_scale_green},
+            {id: "#a-rt", label: "Response Time", value: this.data.a_rt, value_scale: rt_scale, color_scale: color_scale_blue},
+            {id: "#s-opt", label: "P. Optimal", value: this.data.s_opt, value_scale: prop_scale, color_scale: color_scale_red},
+            {id: "#s-sr", label: "Switch Rate", value: this.data.s_sr, value_scale: prop_scale, color_scale: color_scale_green},
+            {id: "#s-rt", label: "Response Time", value: this.data.s_rt, value_scale: rt_scale, color_scale: color_scale_blue}
+        ];
 
-        // And do the same thing to switch rate
-        const a_sr = this.parent.select("#a-sr");
-        a_sr.select(".info").select(".label").html("Switch Rate");
-        a_sr.select(".info").select(".value").html(`${this.data.a_sr}%`);
-        a_sr.select(".figure").selectAll("svg").data([0]).enter().append("svg");
-        const a_sr_figure_svg = a_sr.select(".figure").select("svg");
-        const a_sr_figure_svg_line = a_sr_figure_svg.selectAll("line").data([this.data]);
-        a_sr_figure_svg_line.enter().append("line")
-            .merge(a_sr_figure_svg_line)
-            .attr("x1", "0")
-            .attr("y1", "0")
-            .attr("x2", "0")
-            .attr("y2", "0")
-            .attr("stroke", color_scale_green(0))
-            .transition()
-                .duration(1000)
-                .attr("x2", d => `${prop_scale(d.a_sr)}`)
-                .attr("stroke", d => `${color_scale_green(d.a_sr)}`);
-        a_sr_figure_svg_line.exit().remove();
+        all_panels_data.forEach( data => {
+            // Make some necessary parameters local
+            const color_scale = data.color_scale;
+            const value_scale = data.value_scale;
+            // First render elements for each panel
+            const panel = this.parent.select( data.id );
+            panel.select(".info").select(".label").html( data.label );
+            panel.select(".info").select(".value").html(`${data.value}%`);
+            panel.select(".figure").selectAll("svg").data([0]).enter().append("svg");
+            const panel_figure_svg = panel.select(".figure").select("svg");
+            const panel_figure_svg_line = panel_figure_svg.selectAll("line").data([data.value]);
+            // If <svg> does not exist, i.e., in the intial rendering, the enter selection will have
+            // one sub-selection of <svg>.
+            // When the render function is called again, the enter selection is null, so in order to
+            // update, we need to merge the enter selection with the existing selection.
+            panel_figure_svg_line.enter().append("line")
+                .merge(panel_figure_svg_line)
+                .attr("x1", "0")
+                .attr("y1", "0")
+                .attr("x2", "0")
+                .attr("y2", "0")
+                .attr("stroke", color_scale(0))
+                .transition()
+                    .duration(1000)
+                    .attr("x2", d => `${value_scale(d)}`)
+                    .attr("stroke", d => `${color_scale(d)}`);
+            // Since the data object bound with <svg> will always contain only one element, the exit
+            // selection should always be null. But I'll write the following statement just for completeness.
+            panel_figure_svg_line.exit().remove();            
+        });
 
-        // And do pretty much the same thing to RT, with some adjustments
-        const a_rt = this.parent.select("#a-rt");
-        a_rt.select(".info").select(".label").html("Response Time");
-        a_rt.select(".info").select(".value").html(`${this.data.a_rt}s`);
-        a_rt.select(".figure").selectAll("svg").data([0]).enter().append("svg");
-        const a_rt_figure_svg = a_rt.select(".figure").select("svg");
-        const a_rt_figure_svg_line = a_rt_figure_svg.selectAll("line").data([this.data]);
-        a_rt_figure_svg_line.enter().append("line")
-            .merge(a_rt_figure_svg_line)
-            .attr("x1", "0")
-            .attr("y1", "0")
-            .attr("x2", "0")
-            .attr("y2", "0")
-            .attr("stroke", color_scale_blue(0))
-            .transition()
-                .duration(1000)
-                .attr("x2", d => `${rt_scale(d.a_rt)}`)
-                .attr("stroke", d => `${color_scale_blue(d.a_rt)}`);
-        a_rt_figure_svg_line.exit().remove();
     }
 
 }
