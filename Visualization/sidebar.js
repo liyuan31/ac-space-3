@@ -3,22 +3,24 @@
  */
 class SidebarWidget {
     constructor() {
-        this.data = {
-            a_opt: "0",
-            a_sr: "0",
-            a_rt: "0",
-            s_opt: "0",
-            s_sr: "0",
-            s_rt: "0",
-            sub: "Mean"
-        };   // an object from <Data> class
+        // this.data = {
+        //     a_opt: "0",
+        //     a_sr: "0",
+        //     a_rt: "0",
+        //     s_opt: "0",
+        //     s_sr: "0",
+        //     s_rt: "0",
+        //     sub: "Mean"
+        // };
+        this.data;
         // the parent element of the widget
         this.parent = d3.select(".side-bar-content");
         // the width of the parent element
         // TODO: this is hard-coded
         this.width = 252;
         this.initialize();
-        this.update();
+        main_update("0");
+        // this.update();
     }
 
     /**
