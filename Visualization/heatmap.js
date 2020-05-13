@@ -1,6 +1,7 @@
 class HeatmapWidget {
     constructor() {
-        this.data = [];
+        this.acvs_data = [];
+        this.space_data = [];
         this.parent = d3.select(".side-bar-heatmap");
         this._initialize();
     }
@@ -11,40 +12,79 @@ class HeatmapWidget {
      * Then, initialize the display, which mainly involves drawing the acvs cartoon
      */
     _initialize() {
-        const cx = 50;
-        const cy = 50;
-        const r = 40;
-        const w = 5;
-        for ( let i=1 ; i<=12 ; i++ ) {
-            const angle = 2 * Math.PI / 12;
-            let x = (Math.cos(angle * i - Math.PI / 2) * r*0.5 + cx);
-            let y = (Math.sin(angle * i - Math.PI / 2) * r*0.5 + cy);
-            this.data.push(new Square(x, y, w, w, "white", i));
-        }
-        for ( let i=1 ; i<=18 ; i++ ) {
-            const angle = 2 * Math.PI / 18;
-            let x = (Math.cos(angle * i - Math.PI / 2) * r * 0.75 + cx);
-            let y = (Math.sin(angle * i - Math.PI / 2) * r * 0.75 + cy);
-            this.data.push(new Square(x, y, w, w, "white", i+12));
-        }
-        for ( let i=1 ; i<=24 ; i++ ) {
-            const angle = 2 * Math.PI / 24;
-            let x = (Math.cos(angle * i - Math.PI / 2) * r * 1.0 + cx);
-            let y = (Math.sin(angle * i - Math.PI / 2) * r * 1.0 + cy);
-            this.data.push(new Square(x, y, w, w, "white", i+12+18));
-        }
-        const svg = this.parent.append("svg")
-            .attr("class", "heatmap")
-            .attr("viewBox", "0 0 100 100");
-        const rects = svg.selectAll("rect").data(this.data);
-        rects.enter().append("rect")
-            .attr("x", d => d.x )
-            .attr("y", d => d.y )
-            .attr("width", d => d.w )
-            .attr("height", d => d.h )
-            .attr("fill", d => d.color )
-            .attr("id", d => "heatmap_pos_" + `${d.pos}`);
+        {
+            const squares = [];
+            const cx = 50;
+            const cy = 50;
+            const r = 40;
+            const w = 5;
+            for ( let i=1 ; i<=12 ; i++ ) {
+                const angle = 2 * Math.PI / 12;
+                let x = (Math.cos(angle * i - Math.PI / 2) * r*0.5 + cx);
+                let y = (Math.sin(angle * i - Math.PI / 2) * r*0.5 + cy);
+                squares.push(new Square(x, y, w, w, "rgb(255, 255, 255)", i));
+            }
+            for ( let i=1 ; i<=18 ; i++ ) {
+                const angle = 2 * Math.PI / 18;
+                let x = (Math.cos(angle * i - Math.PI / 2) * r * 0.75 + cx);
+                let y = (Math.sin(angle * i - Math.PI / 2) * r * 0.75 + cy);
+                squares.push(new Square(x, y, w, w, "rgb(255, 255, 255)", i+12));
+            }
+            for ( let i=1 ; i<=24 ; i++ ) {
+                const angle = 2 * Math.PI / 24;
+                let x = (Math.cos(angle * i - Math.PI / 2) * r * 1.0 + cx);
+                let y = (Math.sin(angle * i - Math.PI / 2) * r * 1.0 + cy);
+                squares.push(new Square(x, y, w, w, "rgb(255, 255, 255)", i+12+18));
+            }
+            const svg = this.parent.append("svg")
+                .attr("class", "heatmap")
+                .attr("viewBox", "0 0 100 100");
+            const rects = svg.selectAll("rect").data(squares);
+            rects.enter().append("rect")
+                .attr("x", d => d.x )
+                .attr("y", d => d.y )
+                .attr("width", d => d.w )
+                .attr("height", d => d.h )
+                .attr("fill", d => d.color )
+                .attr("id", d => "heatmap_a_pos_" + `${d.pos}`);
+            }
 
+        {
+            const squares = [];
+            const cx = 50;
+            const cy = 50;
+            const r = 40;
+            const w = 5;
+            for ( let i=1 ; i<=12 ; i++ ) {
+                const angle = 2 * Math.PI / 12;
+                let x = (Math.cos(angle * i - Math.PI / 2) * r*0.5 + cx);
+                let y = (Math.sin(angle * i - Math.PI / 2) * r*0.5 + cy);
+                squares.push(new Square(x, y, w, w, "rgb(255, 255, 255)", i));
+            }
+            for ( let i=1 ; i<=18 ; i++ ) {
+                const angle = 2 * Math.PI / 18;
+                let x = (Math.cos(angle * i - Math.PI / 2) * r * 0.75 + cx);
+                let y = (Math.sin(angle * i - Math.PI / 2) * r * 0.75 + cy);
+                squares.push(new Square(x, y, w, w, "rgb(255, 255, 255)", i+12));
+            }
+            for ( let i=1 ; i<=24 ; i++ ) {
+                const angle = 2 * Math.PI / 24;
+                let x = (Math.cos(angle * i - Math.PI / 2) * r * 1.0 + cx);
+                let y = (Math.sin(angle * i - Math.PI / 2) * r * 1.0 + cy);
+                squares.push(new Square(x, y, w, w, "rgb(255, 255, 255)", i+12+18));
+            }
+            const svg = this.parent.append("svg")
+                .attr("class", "heatmap")
+                .attr("viewBox", "0 0 100 100");
+            const rects = svg.selectAll("rect").data(squares);
+            rects.enter().append("rect")
+                .attr("x", d => d.x )
+                .attr("y", d => d.y )
+                .attr("width", d => d.w )
+                .attr("height", d => d.h )
+                .attr("fill", d => d.color )
+                .attr("id", d => "heatmap_s_pos_" + `${d.pos}`);
+            }
 
         // Just test for the pos
         // const pos = svg.selectAll("text").data(this.data);
@@ -63,24 +103,74 @@ class HeatmapWidget {
         //     .attr("font-size", d => d.w * text_shift + "")
         //     .text(function (d) { return d.pos });
         // pos.exit().remove();
-
-        // Just a test for csv read
     }
 
     /**
      * 
-     * @param {} data : the raw dataset from a subject
+     * @param {} data : the raw standard acvs dataset from a subject
      */
-    _update(data) {
-        this.data = data;
-        this._render();
+    update_acvs(data) {
+        this.acvs_data = data;
+        this._render_acvs();
     }
+
+    update_space(data) {
+        this.space_data = data;
+        this._render_space();
+    }
+
 
     /**
      * This function renders the heatmap according to the current data
      */
-    _render() {
+    _render_acvs() {
+        const color_scale_red = d3.scaleLinear()
+            .domain([0, 15])
+            .range(["white", "red"]);
+        // create a map to record the location and target choice count
+        let count = new Map();
+        for ( let i=1; i<=54; i++) {count.set(`${i}`, 0)}
+        const update = function(pos) {
+            const updated = count.get(pos) + 1;
+            count.set(pos, updated);
+            d3.select("#heatmap_a_pos_" + pos)
+                .attr("fill", color_scale_red(count.get(pos)));
+        }
+        this.acvs_data.forEach( trial => {
+            if (trial.Acc === '1') {
+                // if this is a correct trial
+                if (trial.Targ_Choice === '1') {
+                    update(trial.Targ1_position);
+                } else if (trial.Targ_Choice === '2') {
+                    update(trial.Targ2_position);
+                }
+            }
+        });
+    }
 
+    _render_space() {
+        const color_scale_red = d3.scaleLinear()
+            .domain([0, 15])
+            .range(["white", "black"]);
+        // create a map to record the location and target choice count
+        let count = new Map();
+        for ( let i=1; i<=54; i++) {count.set(`${i}`, 0)}
+        const update = function(pos) {
+            const updated = count.get(pos) + 1;
+            count.set(pos, updated);
+            d3.select("#heatmap_s_pos_" + pos)
+                .attr("fill", color_scale_red(count.get(pos)));
+        }
+        this.space_data.forEach( trial => {
+            if (trial.Acc === '1') {
+                // if this is a correct trial
+                if (trial.Targ_Choice === '1') {
+                    update(trial.Targ1_position);
+                } else if (trial.Targ_Choice === '2') {
+                    update(trial.Targ2_position);
+                }
+            }
+        });
     }
 }
 

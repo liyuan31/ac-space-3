@@ -37,3 +37,28 @@ function main_update(sub) {
     });
 
 }
+
+function heatmap_update(sub) {
+    // First read the csv file, which is very messy because we need to skip one row,
+    // and also notice that acvs is recorded with tab-separated txt file.
+    d3.text("data/raw/Data_AdaptChoice_" + sub + ".txt").then( data => {
+        // remove the first row
+        let cleaned = data.split('\n').slice(1).join('\n');
+        // create a customized parser for delimiter-separated values
+        // see https://github.com/d3/d3-dsv
+        const tsv = d3.dsvFormat('\t');
+        // parse it
+        cleaned = tsv.parse( cleaned );
+        // pass it to the <HeatmapWidget>
+        heatmap.update_acvs(cleaned);
+    })
+
+    d3.text("data/raw/Data_AC_SPACE_" + sub + ".csv").then( data => {
+        // remove the first row
+        let cleaned = data.split('\n').slice(1).join('\n');
+        // parse it
+        cleaned = d3.csvParse( cleaned );
+        // pass it to the <HeatmapWidget>
+        heatmap.update_space(cleaned);
+    })
+}

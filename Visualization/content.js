@@ -229,7 +229,8 @@ function showScatter(parent) {
         }
 
         const clicked = function(d) {
-            main_update(d.sub)
+            main_update(d.sub);
+            heatmap_update(d.sub);
             render_trial_opt(d);
             render_trial_sr(d);
         }
