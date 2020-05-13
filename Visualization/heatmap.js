@@ -47,7 +47,7 @@ class HeatmapWidget {
                 .attr("height", d => d.h )
                 .attr("fill", d => d.color )
                 .attr("id", d => "heatmap_a_pos_" + `${d.pos}`);
-            }
+        }
 
         {
             const squares = [];
@@ -84,7 +84,7 @@ class HeatmapWidget {
                 .attr("height", d => d.h )
                 .attr("fill", d => d.color )
                 .attr("id", d => "heatmap_s_pos_" + `${d.pos}`);
-            }
+        }
 
         // Just test for the pos
         // const pos = svg.selectAll("text").data(this.data);
@@ -125,7 +125,7 @@ class HeatmapWidget {
      */
     _render_acvs() {
         const color_scale_red = d3.scaleLinear()
-            .domain([0, 15])
+            .domain([-2, 2])
             .range(["white", "red"]);
         // create a map to record the location and target choice count
         let count = new Map();
@@ -135,6 +135,23 @@ class HeatmapWidget {
             count.set(pos, updated);
             d3.select("#heatmap_a_pos_" + pos)
                 .attr("fill", color_scale_red(count.get(pos)));
+        }
+        // standardize using z-scores
+        const standardize = function() {
+            let raw = [];
+            let z_score = new Map();
+            for ( let i=1; i <= 54; i++ ) {
+                raw.push(count.get(`${i}`));
+            }
+            const mean = d3.mean(raw);
+            const std = d3.deviation(raw);
+            for ( let i=1; i<=54; i++ ) {
+                z_score.set(`${i}`, (count.get(`${i}`)-mean)/std)
+            }
+            for (let i=1; i<=54; i++) {
+                d3.select(`#heatmap_a_pos_${i}`)
+                    .attr("fill", color_scale_red(z_score.get(`${i}`)));      
+            }
         }
         this.acvs_data.forEach( trial => {
             if (trial.Acc === '1') {
@@ -146,11 +163,12 @@ class HeatmapWidget {
                 }
             }
         });
+        standardize();
     }
 
     _render_space() {
-        const color_scale_red = d3.scaleLinear()
-            .domain([0, 15])
+        const color_scale_black = d3.scaleLinear()
+            .domain([-2, 2])
             .range(["white", "black"]);
         // create a map to record the location and target choice count
         let count = new Map();
@@ -159,7 +177,24 @@ class HeatmapWidget {
             const updated = count.get(pos) + 1;
             count.set(pos, updated);
             d3.select("#heatmap_s_pos_" + pos)
-                .attr("fill", color_scale_red(count.get(pos)));
+                .attr("fill", color_scale_black(count.get(pos)));
+        }
+        // standardize using z-scores
+        const standardize = function() {
+            let raw = [];
+            let z_score = new Map();
+            for ( let i=1; i <= 54; i++ ) {
+                raw.push(count.get(`${i}`));
+            }
+            const mean = d3.mean(raw);
+            const std = d3.deviation(raw);
+            for ( let i=1; i<=54; i++ ) {
+                z_score.set(`${i}`, (count.get(`${i}`)-mean)/std)
+            }
+            for (let i=1; i<=54; i++) {
+                d3.select(`#heatmap_s_pos_${i}`)
+                    .attr("fill", color_scale_black(z_score.get(`${i}`)));      
+            }
         }
         this.space_data.forEach( trial => {
             if (trial.Acc === '1') {
@@ -171,6 +206,7 @@ class HeatmapWidget {
                 }
             }
         });
+        standardize();
     }
 }
 
