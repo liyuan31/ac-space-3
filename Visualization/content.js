@@ -139,7 +139,7 @@ function showScatter(parent) {
     const data_url = "data/ac_space_3.csv";
 
     const svg = parent.append("svg")
-        .attr("width", 500)
+        .attr("width", 560)
         .attr("height", 500);
 
     const width = +svg.attr("width");
@@ -149,7 +149,7 @@ function showScatter(parent) {
         top: 50,
         right: 30,
         bottom: 50,
-        left: 60
+        left: 100
     };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
@@ -167,19 +167,18 @@ function showScatter(parent) {
             .domain([0, 100])
             .range([0, innerWidth]);
 
+        // append x axis
         figureG.append("g")
-            .attr("transform", "translate(0," + innerHeight + ")")
+            .attr("transform", `translate(0, ${innerHeight})`)
             .attr("class", "axis")
             .call(d3.axisBottom(x));
 
+        // append x axis label
         // necessary downward shift to adjust the label
-        const label_shift = 45;
-
+        const x_label_shift_down = 45;
         figureG.append("text")
             .attr("class", "axis-label")
-            .attr("transform",
-                "translate(" + (width / 2) + " ," +
-                (innerHeight + label_shift) + ")")
+            .attr("transform", `translate(${innerWidth/2}, ${innerHeight + x_label_shift_down})`)
             .text("Standard ACVS P. Optimal (%)");
 
         // Add Y axis
@@ -190,11 +189,18 @@ function showScatter(parent) {
             .attr("class", "axis")
             .call(d3.axisLeft(y));
 
+        // Add Y axis label
+        const y_label_shift = -45;
+        figureG.append("text")
+            .attr("class", "axis-label")
+            .attr("transform", `translate(${y_label_shift}, ${innerHeight/2}) rotate(-90)`)
+            .text("Spatial ACVS P. Optimal (%)");
+
         // Color scale: give me a specie name, I return a color
         // var color = d3.scaleOrdinal()
         //   .domain(["1", "2", "3" ])
-        //   .range([ "Magenta", "Teal", "SlateGray"]);
-        const color = ["Magenta", "Teal", "SlateGray"];
+        //   .range([ "Magenta", "Cyan", "SlateGray"]);
+        const color = ["Magenta", "Cyan", "SlateGray"];
 
         // Highlight the specie that is hovered
         const highlight = function(d) {
