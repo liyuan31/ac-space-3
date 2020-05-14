@@ -234,11 +234,11 @@ function showScatter(parent) {
             // showTrialSr("#line_graph_t_sr", 0);
         }
 
-        const clicked = function(d) {
-            main_update(d.sub);
-            heatmap_update(d.sub);
-            render_trial_opt(d);
-            render_trial_sr(d);
+        const clicked = function(sub) {
+            main_update(sub);
+            heatmap_update(sub);
+            render_trial_opt(sub);
+            render_trial_sr(sub);
         }
 
         // Add dots
@@ -262,7 +262,7 @@ function showScatter(parent) {
             // .style("fill", function (d) { return color[d.idx-1] } )
             // .on("load", doNotHighlight )
             .on("mouseover", d => highlight(d))
-            .on("click", d => clicked(d))
+            .on("click", d => clicked(d.sub))
             .on("mouseleave", doNotHighlight);
 
     }
@@ -271,22 +271,18 @@ function showScatter(parent) {
 
 function showTrialOpt(divID, sub) {
 
-    // If div exists, do not need to create it again
-    // if !(document.getElementById(divID).getElementsByTagName("svg").length) {
-
+    // Rewrote to follow the same logic as the scatter plot svg
     // set the dimensions and margins of the graph
     const margin = {
-            top: 20,
-            right: 20,
-            bottom: 30,
-            left: 50
-        },
-        width = 480 - margin.left - margin.right,
-        height = 250 - margin.top - margin.bottom;
+        top: 70,
+        right: 30,
+        bottom: 10,
+        left: 100
+    };
+    const width = 560;
+    const height = 250;
 
-    // append the svg obgect to the body of the page
-    // appends a 'group' element to 'svg'
-    // moves the 'group' element to the top left margin
+    // append the svg element to parent
     let svg = d3.select(divID).append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -531,8 +527,10 @@ function initialize() {
 }
 
 // TODO: duplicated logic
-function render_trial_opt(d) {
-
+/**
+ * 
+ */
+function render_trial_opt(sub) {
 
     // set the dimensions and margins of the graph
     const margin = {
@@ -566,7 +564,7 @@ function render_trial_opt(d) {
         .attr("class", d => d);
 
     // Plot Spatial ACVS p. optimal across trials
-    d3.csv("data/time_series/a_trial_opt_" + d.sub + ".csv").then(function(data) {
+    d3.csv("data/time_series/a_trial_opt_" + sub + ".csv").then(function(data) {
 
         // Add the valueline path.
         d3.selectAll("#a-opt-line-g .line_a")
@@ -576,7 +574,7 @@ function render_trial_opt(d) {
                 .attr("d", valueline);
     });
 
-    d3.csv("data/time_series/s_trial_opt_" + d.sub + ".csv").then(function(data) {
+    d3.csv("data/time_series/s_trial_opt_" + sub + ".csv").then(function(data) {
 
         // Add the valueline path.
         d3.selectAll("#a-opt-line-g .line_s")
@@ -587,7 +585,7 @@ function render_trial_opt(d) {
     });
 }
 
-function render_trial_sr(d) {
+function render_trial_sr(sub) {
 
 
         // set the dimensions and margins of the graph
@@ -622,7 +620,7 @@ function render_trial_sr(d) {
             .attr("class", d => d);
     
         // Plot Spatial ACVS p. optimal across trials
-        d3.csv("data/time_series/a_trial_sr_" + d.sub + ".csv").then(function(data) {
+        d3.csv("data/time_series/a_trial_sr_" + sub + ".csv").then(function(data) {
     
             // Add the valueline path.
             d3.selectAll("#t-sr-line-g .line_a")
@@ -632,7 +630,7 @@ function render_trial_sr(d) {
                     .attr("d", valueline);
         });
     
-        d3.csv("data/time_series/s_trial_sr_" + d.sub + ".csv").then(function(data) {
+        d3.csv("data/time_series/s_trial_sr_" + sub + ".csv").then(function(data) {
     
             // Add the valueline path.
             d3.selectAll("#t-sr-line-g .line_s")
