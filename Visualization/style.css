@@ -137,13 +137,13 @@ body {
 
 /* Specifics for the line graphs */
 
-.line_a {
+.line-a {
     fill: none;
     stroke: red;
     stroke-width: 2px;
 }
 
-.line_s {
+.line-s {
     fill: none;
     stroke: black;
     stroke-width: 2px;

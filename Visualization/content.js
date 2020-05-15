@@ -1,6 +1,7 @@
 showScatter(d3.select("#scatter"));
 // initialize();
 render_trial_opt(-1);
+render_trial_sr(-1);
 
 function showBarGraphs(id) {
     const data_url = "data/ac_space_3.csv";
@@ -357,7 +358,6 @@ function initialize() {
     }
 }
 
-// TODO: duplicated logic
 /**
  * 
  */
@@ -407,13 +407,13 @@ function render_trial_opt(sub) {
 
     // Append the element that groups the two lines
     figure_g.append("g")
-        .attr("id", "a-opt-line-g")
+        .attr("id", "t-opt-line-g")
         .attr("class", "line");
 
     // Append the figure title
     const title_shift_up = 10;
     figure_g.append("text")
-        .text("Average Prop. Optimal on the last 10 trials")
+        .text("Avg. Prop. Optimal on the Last 10 Trials")
         .attr("class", "graph-title")
         .attr("transform", `translate(${innerWidth/2}, ${-title_shift_up})`);
 
@@ -442,7 +442,7 @@ function render_trial_opt(sub) {
                 return y(d.ten_trials_mean);
             });
 
-        d3.select("#a-opt-line-g").selectAll("path").data(["line_a", "line_s"]).enter()
+        d3.select("#t-opt-line-g").selectAll("path").data(["line-a", "line-s"]).enter()
             .append("path")
             .attr("class", d => d);
 
@@ -450,7 +450,7 @@ function render_trial_opt(sub) {
         d3.csv("data/time_series/a_trial_opt_" + sub + ".csv").then( data => {
 
             // Add the valueline path.
-            d3.selectAll("#a-opt-line-g .line_a")
+            d3.selectAll("#t-opt-line-g .line-a")
                 .data([data])
                 .transition()
                     .duration(500)
@@ -460,7 +460,7 @@ function render_trial_opt(sub) {
         d3.csv("data/time_series/s_trial_opt_" + sub + ".csv").then( data => {
 
             // Add the valueline path.
-            d3.selectAll("#a-opt-line-g .line_s")
+            d3.selectAll("#t-opt-line-g .line-s")
                 .data([data])
                 .transition()
                 .duration(500)
@@ -472,25 +472,76 @@ function render_trial_opt(sub) {
 
 function render_trial_sr(sub) {
 
+    // Rewrote to follow the same logic as the scatter plot svg
+    // set the dimensions and margins of the graph
+    const margin = {
+        top: 60,
+        right: 50,
+        bottom: 20,
+        left: 100
+    };
+    const width = 580;
+    const height = 250;
 
-        // set the dimensions and margins of the graph
-        const margin = {
-            top: 20,
-            right: 20,
-            bottom: 30,
-            left: 50
-        },
-            width = 480 - margin.left - margin.right,
-            height = 250 - margin.top - margin.bottom;
-    
-        // set the ranges
-        const x = d3.scaleLinear().range([0, width]);
-        const y = d3.scaleLinear().range([height, 0]);
-    
-        x.domain([0, 252]);
-    
-        y.domain([0, 1]);
-    
+    const innerHeight = height - margin.top - margin.bottom;
+    const innerWidth = width - margin.left - margin.right;
+
+    // set the ranges
+    const x = d3.scaleLinear().range([0, innerWidth]);
+    const y = d3.scaleLinear().range([innerHeight, 0]);
+
+    x.domain([0, 252]);
+
+    y.domain([0, 1]);
+
+    // Append the svg element to the parent <div>
+    const svg = d3.select("#t-sr-lines").selectAll("svg").data([1]).enter().append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    // Append the <g> for the actual figure
+    const figure_g = svg.selectAll("g").data([0,1]).enter().append("g")
+        .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+    // Add the X Axis
+    figure_g.append("g")
+        .attr("class", "axis")
+        .attr("transform", `translate(0, ${innerHeight})`)
+        .call(d3.axisBottom(x));
+
+    // Add the Y Axis
+    figure_g.append("g")
+        .attr("class", "axis")
+        .call(d3.axisLeft(y));
+
+    // Append the element that groups the two lines
+    figure_g.append("g")
+        .attr("id", "t-sr-line-g")
+        .attr("class", "line");
+
+    // Append the figure title
+    const title_shift_up = 10;
+    figure_g.append("text")
+        .text("Avg. Switch Rate on the Last 10 Trials")
+        .attr("class", "graph-title")
+        .attr("transform", `translate(${innerWidth/2}, ${-title_shift_up})`);
+
+    // Append the group element for the legend
+    const legend_shift_left = 40;
+    const legend_shift_up = 30;
+    const legend = figure_g.append("g")
+        .attr("class", "line-legend")
+        .attr("transform",
+            `translate(${innerWidth - legend_shift_left}, ${-legend_shift_up})`);
+    legend.append("text")
+        .text("----- Standard")
+        .attr("fill", "red");
+    legend.append("text")
+        .text("----- Spatial")
+        .attr("fill", "black")
+        .attr("transform", "translate(0,20)");
+
+    if (sub !== -1) {
         // define the line
         const valueline = d3.line()
             .x(function(d) {
@@ -499,30 +550,31 @@ function render_trial_sr(sub) {
             .y(function(d) {
                 return y(d.ten_trials_mean);
             });
-    
-        d3.select("#t-sr-line-g").selectAll("path").data(["line_a", "line_s"]).enter()
+
+        d3.select("#t-sr-line-g").selectAll("path").data(["line-a", "line-s"]).enter()
             .append("path")
             .attr("class", d => d);
-    
+
         // Plot Spatial ACVS p. optimal across trials
-        d3.csv("data/time_series/a_trial_sr_" + sub + ".csv").then(function(data) {
-    
+        d3.csv("data/time_series/a_trial_sr_" + sub + ".csv").then( data => {
+
             // Add the valueline path.
-            d3.selectAll("#t-sr-line-g .line_a")
+            d3.selectAll("#t-sr-line-g .line-a")
                 .data([data])
                 .transition()
                     .duration(500)
                     .attr("d", valueline);
         });
-    
-        d3.csv("data/time_series/s_trial_sr_" + sub + ".csv").then(function(data) {
-    
+
+        d3.csv("data/time_series/s_trial_sr_" + sub + ".csv").then( data => {
+
             // Add the valueline path.
-            d3.selectAll("#t-sr-line-g .line_s")
+            d3.selectAll("#t-sr-line-g .line-s")
                 .data([data])
                 .transition()
                 .duration(500)
                     .attr("d", valueline);
         });
+    }
 
 }
