@@ -13,6 +13,12 @@ class HeatmapWidget {
      */
     _initialize() {
         {
+            // Create a title
+            this.parent.append("div")
+                .attr("class", "title")
+                .html("Heatmaps")
+        }
+        {
             const squares = [];
             const cx = 50;
             const cy = 50;
@@ -124,9 +130,11 @@ class HeatmapWidget {
      * This function renders the heatmap according to the current data
      */
     _render_acvs() {
-        const color_scale_red = d3.scaleLinear()
+        // prepare a scale that, after standarize to z score, convert to a scale from
+        // 0 to 1
+        const scale_z_to_0_to_1 = d3.scaleLinear()
             .domain([-2, 2])
-            .range(["white", "red"]);
+            .range([0, 1]);
         // create a map to record the location and target choice count
         let count = new Map();
         for ( let i=1; i<=54; i++) {count.set(`${i}`, 0)}
@@ -134,7 +142,7 @@ class HeatmapWidget {
             const updated = count.get(pos) + 1;
             count.set(pos, updated);
             d3.select("#heatmap_a_pos_" + pos)
-                .attr("fill", color_scale_red(count.get(pos)));
+                .attr("fill", d3.interpolateReds(scale_z_to_0_to_1(count.get(pos))));
         }
         // standardize using z-scores
         const standardize = function() {
@@ -150,7 +158,7 @@ class HeatmapWidget {
             }
             for (let i=1; i<=54; i++) {
                 d3.select(`#heatmap_a_pos_${i}`)
-                    .attr("fill", color_scale_red(z_score.get(`${i}`)));      
+                    .attr("fill", d3.interpolateReds(scale_z_to_0_to_1(z_score.get(`${i}`))));      
             }
         }
         this.acvs_data.forEach( trial => {
@@ -167,33 +175,41 @@ class HeatmapWidget {
     }
 
     _render_space() {
-        const color_scale_black = d3.scaleLinear()
+        // prepare a scale that, after standarize to z score, convert to a scale from
+        // 0 to 1
+        const scale_z_to_0_to_1 = d3.scaleLinear()
             .domain([-2, 2])
-            .range(["white", "black"]);
+            .range([0, 1]);
         // create a map to record the location and target choice count
+        // exclude squares that doesn't exist
+        const excluded = [54, 30, 12, 6, 21, 42];
         let count = new Map();
-        for ( let i=1; i<=54; i++) {count.set(`${i}`, 0)}
+        for ( let i=1; i<=54; i++) {
+            if(!excluded.includes(i)) { count.set(`${i}`, 0) }
+        }
         const update = function(pos) {
             const updated = count.get(pos) + 1;
             count.set(pos, updated);
             d3.select("#heatmap_s_pos_" + pos)
-                .attr("fill", color_scale_black(count.get(pos)));
+                .attr("fill", d3.interpolateGreys(scale_z_to_0_to_1(count.get(pos))));
         }
         // standardize using z-scores
         const standardize = function() {
             let raw = [];
             let z_score = new Map();
-            for ( let i=1; i <= 54; i++ ) {
-                raw.push(count.get(`${i}`));
+            for ( let i=1; i<=54; i++ ) {
+                if(!excluded.includes(i)) { raw.push(count.get(`${i}`)) }
             }
             const mean = d3.mean(raw);
             const std = d3.deviation(raw);
             for ( let i=1; i<=54; i++ ) {
-                z_score.set(`${i}`, (count.get(`${i}`)-mean)/std)
+                if(!excluded.includes(i)) {z_score.set(`${i}`, (count.get(`${i}`)-mean)/std)}
             }
             for (let i=1; i<=54; i++) {
-                d3.select(`#heatmap_s_pos_${i}`)
-                    .attr("fill", color_scale_black(z_score.get(`${i}`)));      
+                if(!excluded.includes(i)) {
+                    d3.select(`#heatmap_s_pos_${i}`)
+                        .attr("fill", d3.interpolateGreys(scale_z_to_0_to_1(z_score.get(`${i}`))));                       
+                } 
             }
         }
         this.space_data.forEach( trial => {
@@ -207,6 +223,7 @@ class HeatmapWidget {
             }
         });
         standardize();
+        console.log(count)
     }
 }
 
