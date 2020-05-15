@@ -129,6 +129,14 @@ body {
     font-size: 18px;
 }
 
+.graph-title {
+    font-family: Arial;
+    font-size: 18px;
+    text-anchor: middle;
+}
+
+/* Specifics for the line graphs */
+
 .line_a {
     fill: none;
     stroke: red;
